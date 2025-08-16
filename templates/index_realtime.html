@@ -265,8 +265,8 @@
 <body>
     <div class="page">
         <div class="header">
-            <h1>Asthmatic Protection Device — Realtime Dashboard</h1>
-            <h3>Realtime readings from ESP32 & predictive outputs</h3>
+            <h1>AI BASED PLANT HEALTH MONITORING, PREDICTION AND OPTIMIZATION SYSTEM FOR COMMERCIAL FARMS — Realtime Dashboard</h1>
+            <h3>Realtime readings from Farm & Predictive outputs</h3>
         </div>
 
         <!-- Latest summary/advice (severity-colored) -->
@@ -434,7 +434,7 @@
         }
 
         async function refresh() {
-            const rows = await fetchRecent(10);
+            const rows = await fetchRecent(15);
             renderTable(rows);
             if (rows.length > 0) {
                 updateStatusCardFromLatest(rows[rows.length - 1]);
