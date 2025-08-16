@@ -1,4 +1,8 @@
 Flask
+pandas
+os
+threading
+io
 Flask-Cors
 gunicorn
 numpy
