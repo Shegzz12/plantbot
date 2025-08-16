@@ -434,7 +434,7 @@
         }
 
         async function refresh() {
-            const rows = await fetchRecent(20);
+            const rows = await fetchRecent(10);
             renderTable(rows);
             if (rows.length > 0) {
                 updateStatusCardFromLatest(rows[rows.length - 1]);
