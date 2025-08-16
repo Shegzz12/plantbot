@@ -1,0 +1,29 @@
+0 — All parameters optimal
+ Advice[0]: Conditions are within ideal ranges. Maintain irrigation and nutrition schedules, scout weekly for pests, keep mulch 3–5cm, and record conditions for tuning.
+
+1 — Dry soil with cool plant
+ Advice[1]: Soil moisture is too low while leaf temps are cool: irrigate deeply to wet the root zone, add warm mulch, protect plants from cold at night using covers.
+
+2 — Dry soil with heat stress
+ Advice[2]: Drought + heat: apply deep irrigation immediately, deploy shade cloth during peak sun, mist in cooler hours, and avoid midday foliar wetting to prevent burns.
+
+3 — Waterlogged soil with cool plant
+ Advice[3]: Waterlogged & cool: stop irrigation, improve surface drainage, gently aerate soil, apply dark mulch to raise soil temperature slightly and reduce root-rot risk.
+
+4 — Waterlogged soil with heat stress
+ Advice[4]: Waterlogged & hot: improve drainage immediately, reduce standing water, provide partial shade, pause further watering until soil drains, and monitor for disease.
+
+5 — Low humidity combined with heat (transpiration stress)
+ Advice[5]: Low humidity with high temperatures: raise local humidity with intermittent misting or trays, add partial shade, and monitor plant turgor and VPD to avoid excessive transpiration.
+
+6 — High humidity and waterlogging risk (disease-prone)
+ Advice[6]: High humidity combined with wet soil: high disease risk — increase ventilation, space plants, remove standing water, and prune dense growth to improve airflow.
+
+7 — Systemic heat stress (air + soil + leaves hot)
+ Advice[7]: System-wide heat stress: combine shade cloth, enhanced ventilation, deep early-morning irrigation, and consider evaporative cooling if available to protect canopy and roots.
+
+8 — Systemic cold stress (air/soil/leaf too cool)
+ Advice[8]: Systemic cold stress: protect plants at night with covers, minimize cold irrigation, consider temporary heating in protected structures, and delay transplanting until warmer.
+
+9 — Minor/mixed deviations — small adjustments recommended
+ Advice[9]: Minor or mixed deviations: make small targeted adjustments (slightly tweak irrigation, add thin mulch, introduce partial shade or a fan) and monitor daily for trends.

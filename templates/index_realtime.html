@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI BASED PLANT HEALTH MONITORING, PREDICTION AND OPTIMIZATION SYSTEM FOR COMMERCIAL FARMS — Realtime
+        Dashboard</title>
+
+    <style>
+        :root {
+            --good-bg: #e8f7ee;
+            --good-border: #16a34a;
+            --mild-bg: #fff7e6;
+            --mild-border: #f59e0b;
+            --moderate-bg: #fff1e6;
+            --moderate-border: #fb923c;
+            --high-bg: #ffeaea;
+            --high-border: #ef4444;
+            --critical-bg: #fde8ec;
+            --critical-border: #be123c;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(180deg, #f4f6ff 0%, #ffffff 100%);
+            min-height: 100vh;
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            color: #0b1161;
+            margin: 0;
+            font-size: 22px;
+        }
+
+        h3 {
+            color: #333;
+            margin: 6px 0 16px 0;
+            font-weight: normal;
+            font-size: 15px;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 14px;
+        }
+
+        button {
+            background: #030575;
+            color: #fff;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button.secondary {
+            background: #6b7280;
+        }
+
+        .small {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* STATUS CARD */
+        .status-card {
+            margin: 8px auto 16px;
+            width: 100%;
+            border-radius: 12px;
+            padding: 16px 18px;
+            background: #eef2ff;
+            border: 2px solid #03057522;
+            box-shadow: 0 6px 18px rgba(12, 20, 60, 0.06);
+        }
+
+        .status-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .status-title {
+            margin: 0;
+            color: #0b1161;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .pill {
+            margin-left: auto;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            border: 2px solid transparent;
+            background: #fff;
+            color: #111;
+        }
+
+        .status-body {
+            display: grid;
+            gap: 6px;
+        }
+
+        .status-line {
+            margin: 0;
+            font-size: 14px;
+            color: #111;
+            line-height: 1.45;
+        }
+
+        .status-meta {
+            margin-top: 4px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* severity themes via data-level */
+        .status-card[data-level="good"] {
+            background: var(--good-bg);
+            border-color: var(--good-border);
+        }
+
+        .status-card[data-level="good"] .pill {
+            border-color: var(--good-border);
+            color: var(--good-border);
+        }
+
+        .status-card[data-level="mild"] {
+            background: var(--mild-bg);
+            border-color: var(--mild-border);
+        }
+
+        .status-card[data-level="mild"] .pill {
+            border-color: var(--mild-border);
+            color: var(--mild-border);
+        }
+
+        .status-card[data-level="moderate"] {
+            background: var(--moderate-bg);
+            border-color: var(--moderate-border);
+        }
+
+        .status-card[data-level="moderate"] .pill {
+            border-color: var(--moderate-border);
+            color: var(--moderate-border);
+        }
+
+        .status-card[data-level="high"] {
+            background: var(--high-bg);
+            border-color: var(--high-border);
+        }
+
+        .status-card[data-level="high"] .pill {
+            border-color: var(--high-border);
+            color: var(--high-border);
+        }
+
+        .status-card[data-level="critical"] {
+            background: var(--critical-bg);
+            border-color: var(--critical-border);
+        }
+
+        .status-card[data-level="critical"] .pill {
+            border-color: var(--critical-border);
+            color: var(--critical-border);
+        }
+
+        /* TABLE */
+        .table-wrap {
+            width: 100%;
+            background: #fff;
+            border-radius: 8px;
+            overflow: auto;
+            box-shadow: 0 6px 18px rgba(12, 20, 60, 0.06);
+        }
+
+        table {
+            border-collapse: collapse;
+            min-width: 900px;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border-bottom: 1px solid #ddd;
+            padding: 8px 10px;
+            text-align: left;
+            font-size: 13px;
+            color: #111;
+        }
+
+        th {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background: #030575;
+            color: #fff;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        tbody tr:nth-child(odd) {
+            background: #f9f9ff;
+        }
+
+        tbody tr:hover {
+            background: #dfe8ff;
+        }
+
+        .footer-note {
+            margin-top: 12px;
+            color: #666;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width:768px) {
+            h1 {
+                font-size: 18px;
+            }
+
+            h3 {
+                font-size: 13px;
+            }
+
+            .status-title {
+                font-size: 16px;
+            }
+
+            .status-line {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <div class="header">
+            <h1>Asthmatic Protection Device — Realtime Dashboard</h1>
+            <h3>Realtime readings from ESP32 & predictive outputs</h3>
+        </div>
+
+        <!-- Latest summary/advice (severity-colored) -->
+        <section class="status-card" id="statusCard" data-level="mild" aria-live="polite">
+            <div class="status-head">
+                <h2 class="status-title">Latest Status</h2>
+                <span id="severityPill" class="pill">MILD</span>
+            </div>
+            <div class="status-body">
+                <p id="latest-summary" class="status-line">Summary: —</p>
+                <p id="latest-advice" class="status-line">Advice: —</p>
+                <div id="latest-meta" class="status-meta">Last update: —</div>
+            </div>
+        </section>
+
+        <div class="controls">
+            <button id="download-logs">Download Logs CSV</button>
+            <button id="download-dataset">Download Dataset CSV</button>
+            <button id="delete-logs" class="secondary">Delete Logs (server)</button>
+
+            <div style="display:flex; align-items:center; gap:8px;">
+                <span class="small">Auto-refresh</span>
+                <select id="refresh-interval">
+                    <option value="2000">2s</option>
+                    <option value="5000" selected>5s</option>
+                    <option value="10000">10s</option>
+                    <option value="30000">30s</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <table id="data-table">
+                <thead>
+                    <tr>
+                        <th>Timestamp (WAT)</th>
+                        <th>soil_moist_raw</th>
+                        <th>air_hum_raw</th>
+                        <th>air_temp_raw</th>
+                        <th>plant_temp_raw</th>
+                        <th>soil_temp_raw</th>
+                        <th>soil_moist_cat</th>
+                        <th>air_hum_cat</th>
+                        <th>air_temp_cat</th>
+                        <th>plant_temp_cat</th>
+                        <th>soil_temp_cat</th>
+                        <th>method</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="footer-note">
+            Showing most recent rows. Use the download buttons to get the full CSV files from the server.
+        </div>
+    </div>
+
+    <script>
+        // --- DOM refs
+        const tableBody = document.querySelector('#data-table tbody');
+        const downloadLogsBtn = document.getElementById('download-logs');
+        const downloadDatasetBtn = document.getElementById('download-dataset');
+        const deleteLogsBtn = document.getElementById('delete-logs');
+        const refreshSelect = document.getElementById('refresh-interval');
+
+        const statusCard = document.getElementById('statusCard');
+        const severityPill = document.getElementById('severityPill');
+        const latestSummaryEl = document.getElementById('latest-summary');
+        const latestAdviceEl = document.getElementById('latest-advice');
+        const latestMetaEl = document.getElementById('latest-meta');
+
+        let refreshTimer = null;
+        let currentInterval = parseInt(refreshSelect.value, 10);
+
+        // Map backend SUMMARY_TEXT strings -> severity levels
+        // (exact strings taken from your Flask backend)
+        const SEVERITY_BY_SUMMARY = {
+            "All parameters optimal": "good",
+            "Minor/mixed deviations — small adjustments recommended": "mild",
+            "Dry soil with cool plant": "moderate",
+            "Dry soil with heat stress": "high",
+            "Waterlogged soil with cool plant": "moderate",
+            "Waterlogged soil with heat stress": "high",
+            "Low humidity combined with heat (transpiration stress)": "high",
+            "High humidity and waterlogging risk (disease-prone)": "high",
+            "Systemic heat stress (air + soil + leaves hot)": "critical",
+            "Systemic cold stress: protect plants at night with covers, minimize cold irrigation, consider temporary heating in protected structures, and delay transplanting until warmer.": "high",
+            "Systemic cold stress (air/soil/leaf too cool)": "high" // if older text mapping is used
+        };
+
+        function levelLabel(level) {
+            switch (level) {
+                case 'good': return 'GOOD';
+                case 'mild': return 'MILD';
+                case 'moderate': return 'MODERATE';
+                case 'high': return 'HIGH';
+                case 'critical': return 'CRITICAL';
+                default: return 'INFO';
+            }
+        }
+
+        async function fetchRecent(limit = 50) {
+            try {
+                const res = await fetch(`/api/recent?limit=${limit}`, { cache: 'no-store' });
+                if (!res.ok) throw new Error('Server returned ' + res.status);
+                const data = await res.json();
+                return data;
+            } catch (err) {
+                console.error('Failed to fetch recent logs:', err);
+                return [];
+            }
+        }
+
+        function renderTable(rows) {
+            tableBody.innerHTML = '';
+            if (!Array.isArray(rows)) return;
+
+            const start = Math.max(0, rows.length - 100);
+            for (let i = rows.length - 1; i >= start; i--) {
+                const r = rows[i];
+                const tr = document.createElement('tr');
+
+                function cell(text) { const td = document.createElement('td'); td.textContent = (text ?? ''); return td; }
+
+                tr.appendChild(cell(r.timestamp));
+                tr.appendChild(cell(r.soil_moist_raw));
+                tr.appendChild(cell(r.air_hum_raw));
+                tr.appendChild(cell(r.air_temp_raw));
+                tr.appendChild(cell(r.plant_temp_raw));
+                tr.appendChild(cell(r.soil_temp_raw));
+                tr.appendChild(cell(r.soil_moist_cat));
+                tr.appendChild(cell(r.air_hum_cat));
+                tr.appendChild(cell(r.air_temp_cat));
+                tr.appendChild(cell(r.plant_temp_cat));
+                tr.appendChild(cell(r.soil_temp_cat));
+                tr.appendChild(cell(r.method));
+
+                tableBody.appendChild(tr);
+            }
+        }
+
+        function updateStatusCardFromLatest(latest) {
+            const summary = latest?.summary_text || '—';
+            const advice = latest?.advice_text || '—';
+            const ts = latest?.timestamp || '—';
+
+            // Determine level
+            let level = SEVERITY_BY_SUMMARY[summary];
+            if (!level) {
+                // Fallback heuristics if summary text changes in the future
+                const s = summary.toLowerCase();
+                if (s.includes('optimal')) level = 'good';
+                else if (s.includes('minor') || s.includes('mixed')) level = 'mild';
+                else if (s.includes('systemic heat') || s.includes('heat stress')) level = 'critical';
+                else if (s.includes('cold stress') || s.includes('waterlogged') || s.includes('high humidity') || s.includes('drought')) level = 'high';
+                else level = 'moderate';
+            }
+
+            statusCard.setAttribute('data-level', level);
+            severityPill.textContent = levelLabel(level);
+            latestSummaryEl.textContent = 'Summary: ' + summary;
+            latestAdviceEl.textContent = 'Advice: ' + advice;
+            latestMetaEl.textContent = 'Last update: ' + ts;
+        }
+
+        async function refresh() {
+            const rows = await fetchRecent(200);
+            renderTable(rows);
+            if (rows.length > 0) {
+                updateStatusCardFromLatest(rows[rows.length - 1]);
+            }
+        }
+
+        function startAutoRefresh() {
+            if (refreshTimer) clearInterval(refreshTimer);
+            refreshTimer = setInterval(refresh, currentInterval);
+        }
+
+        refreshSelect.addEventListener('change', () => {
+            currentInterval = parseInt(refreshSelect.value, 10);
+            startAutoRefresh();
+        });
+
+        downloadLogsBtn.addEventListener('click', () => {
+            window.location.href = '/download_logs';
+        });
+
+        downloadDatasetBtn.addEventListener('click', () => {
+            window.location.href = '/download_dataset';
+        });
+
+        deleteLogsBtn.addEventListener('click', async () => {
+            if (!confirm('Delete all log rows on server? This cannot be undone unless you have backups.')) return;
+            try {
+                const res = await fetch('/delete_logs', { method: 'POST' });
+                if (!res.ok) throw new Error('Server returned ' + res.status);
+                const j = await res.json();
+                alert(j.message || 'Deleted');
+                await refresh();
+            } catch (err) {
+                console.error('Delete failed', err);
+                alert('Delete failed: ' + err.message);
+            }
+        });
+
+        // initial load
+        refresh();
+        startAutoRefresh();
+    </script>
+</body>
+
+</html>
