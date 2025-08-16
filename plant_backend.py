@@ -296,7 +296,7 @@ def api_recent():
     Rows returned in chronological order (oldest -> newest).
     Each row is a dict matching the CSV header columns.
     """
-    limit = request.args.get("limit", default=200, type=int)
+    limit = request.args.get("limit", default=20, type=int)
     if limit <= 0:
         return jsonify([])
 
@@ -380,3 +380,4 @@ def delete_logs():
 if __name__ == "__main__":
     # For local testing only. In production, run under gunicorn/uwsgi/wsgi server.
     app.run(host="0.0.0.0", port=5000, debug=True)
+
